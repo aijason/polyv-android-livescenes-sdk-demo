@@ -36,7 +36,7 @@ import com.plv.thirdpart.blankj.utilcode.util.ToastUtils;
 /**
  * date: 2020-04-29
  * author: hwj
- * 云课堂场景 & 直播带货场景 登录界面
+ * 登录界面
  */
 public class PLVLoginActivity extends PLVBaseActivity {
 

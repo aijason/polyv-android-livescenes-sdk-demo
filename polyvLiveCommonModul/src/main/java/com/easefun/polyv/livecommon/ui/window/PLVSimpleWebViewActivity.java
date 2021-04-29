@@ -86,7 +86,7 @@ public abstract class PLVSimpleWebViewActivity extends PLVBaseActivity {
         }
         if (!isLoadUrl()) {
             String content = PLVWebViewContentUtils.toWebViewContent(urlOrHtmlText());
-            webView.loadDataWithBaseURL(null, content, "text/html; charset=UTF-8", null, null);
+            webView.loadData(content, "text/html; charset=UTF-8", null);
         } else {
             webView.loadUrl(urlOrHtmlText());
         }

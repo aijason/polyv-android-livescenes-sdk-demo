@@ -63,11 +63,10 @@ public class PLVUriPathHelper {
             if (inputStream == null) return;
             outputStream = new FileOutputStream(dstFile);
             copyStream(inputStream, outputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-            PLVCommonLog.e(TAG,"copyFile:"+e.getMessage());
+        } catch (IOException e) {
+           PLVCommonLog.e(TAG,"copyFile:"+e.getMessage());
         } finally {
-            CloseUtils.closeIO(inputStream, outputStream);
+            CloseUtils.closeIO(inputStream,outputStream);
         }
     }
 

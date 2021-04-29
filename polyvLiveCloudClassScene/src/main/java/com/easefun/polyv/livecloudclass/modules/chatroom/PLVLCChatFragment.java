@@ -359,7 +359,7 @@ public class PLVLCChatFragment extends PLVInputFragment implements View.OnClickL
         @Override
         public void onCloseRoomEvent(@NonNull final PLVCloseRoomEvent closeRoomEvent) {
             super.onCloseRoomEvent(closeRoomEvent);
-            if (chatCommonMessageList != null && chatCommonMessageList.isLandscapeLayout()) {
+            if (chatCommonMessageList.isLandscapeLayout()) {
                 return;
             }
             handler.post(new Runnable() {
@@ -442,7 +442,7 @@ public class PLVLCChatFragment extends PLVInputFragment implements View.OnClickL
                 swipeLoadView.setRefreshing(false);
                 swipeLoadView.setEnabled(true);
             }
-            if (chatroomPresenter != null && viewIndex == chatroomPresenter.getViewIndex(chatroomView)) {
+            if (viewIndex == chatroomPresenter.getViewIndex(chatroomView)) {
                 ToastUtils.showShort(getString(R.string.plv_chat_toast_history_load_failed) + ": " + errorMsg);
             }
         }
@@ -482,26 +482,19 @@ public class PLVLCChatFragment extends PLVInputFragment implements View.OnClickL
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if (chatCommonMessageList != null) {
-                    chatCommonMessageList.addChatMessageToList(chatMessageDataList, isScrollEnd, false);
-                }
+                chatCommonMessageList.addChatMessageToList(chatMessageDataList, isScrollEnd, false);
             }
         });
     }
 
     private void addChatHistoryToList(final List<PLVBaseViewData<PLVBaseEvent>> chatMessageDataList, final boolean isScrollEnd) {
-        if (chatCommonMessageList != null) {
-            chatCommonMessageList.addChatHistoryToList(chatMessageDataList, isScrollEnd, false);
-        }
+        chatCommonMessageList.addChatHistoryToList(chatMessageDataList, isScrollEnd, false);
     }
 
     private void removeChatMessageToList(final String id, final boolean isRemoveAll) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if (chatCommonMessageList == null) {
-                    return;
-                }
                 if (isRemoveAll) {
                     chatCommonMessageList.removeAllChatMessage(false);
                 } else {
@@ -519,9 +512,6 @@ public class PLVLCChatFragment extends PLVInputFragment implements View.OnClickL
             return false;
         } else {
             PolyvLocalMessage localMessage = new PolyvLocalMessage(message);
-            if (chatroomPresenter == null) {
-                return false;
-            }
             Pair<Boolean, Integer> sendResult = chatroomPresenter.sendChatMessage(localMessage);
             if (sendResult.first) {
                 //清空输入框内容并隐藏键盘/弹出的表情布局等
@@ -635,9 +625,7 @@ public class PLVLCChatFragment extends PLVInputFragment implements View.OnClickL
         sendLocalImgEvent.setWidth(pictureWh[0]);
         sendLocalImgEvent.setHeight(pictureWh[1]);
 
-        if (chatroomPresenter != null) {
-            chatroomPresenter.sendChatImage(sendLocalImgEvent);
-        }
+        chatroomPresenter.sendChatImage(sendLocalImgEvent);
         hideSoftInputAndPopupLayout();
     }
     // </editor-fold>
@@ -710,9 +698,6 @@ public class PLVLCChatFragment extends PLVInputFragment implements View.OnClickL
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (chatCommonMessageList == null) {
-                return;
-            }
             boolean result = chatCommonMessageList.attachToParent(swipeLoadView, false);
             if (result && chatroomPresenter != null) {
                 chatCommonMessageList.setMsgIndex(chatroomPresenter.getViewIndex(chatroomView));
@@ -727,15 +712,10 @@ public class PLVLCChatFragment extends PLVInputFragment implements View.OnClickL
 
     // <editor-fold defaultstate="collapsed" desc="数据监听 - 观察功能开关数据">
     private void observeFunctionSwitchData() {
-        if (chatroomPresenter == null) {
-            return;
-        }
         chatroomPresenter.getData().getFunctionSwitchData().observe(this, new Observer<List<PolyvChatFunctionSwitchVO.DataBean>>() {
             @Override
             public void onChanged(@Nullable List<PolyvChatFunctionSwitchVO.DataBean> dataBeans) {
-                if (chatroomPresenter != null) {
-                    chatroomPresenter.getData().getFunctionSwitchData().removeObserver(this);
-                }
+                chatroomPresenter.getData().getFunctionSwitchData().removeObserver(this);
                 if (dataBeans == null) {
                     return;
                 }
@@ -780,9 +760,7 @@ public class PLVLCChatFragment extends PLVInputFragment implements View.OnClickL
         } else if (id == R.id.change_message_type_ly) {
             changeMessageTypeLy.setSelected(!changeMessageTypeLy.isSelected());
             messageTypeTv.setText(changeMessageTypeLy.isSelected() ? R.string.plv_chat_view_all_message : R.string.plv_chat_view_special_message);
-            if (chatCommonMessageList != null) {
-                chatCommonMessageList.changeDisplayType(changeMessageTypeLy.isSelected());
-            }
+            chatCommonMessageList.changeDisplayType(changeMessageTypeLy.isSelected());
         } else if (id == R.id.show_bulletin_ly) {
             hideSoftInputAndPopupLayout();
             if (onViewActionListener != null) {
@@ -793,9 +771,7 @@ public class PLVLCChatFragment extends PLVInputFragment implements View.OnClickL
         } else if (id == R.id.open_camera_ly) {
             requestOpenCamera();
         } else if (id == R.id.likes_view) {
-            if (chatroomPresenter != null) {
-                chatroomPresenter.sendLikeMessage();
-            }
+            chatroomPresenter.sendLikeMessage();
             acceptLikesMessage(1);
         }
     }
